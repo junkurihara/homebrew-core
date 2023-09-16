@@ -1,2 +1,3 @@
-# homebrew
-homebrew
+# homebrew-core
+
+homebrew formulas used personally
