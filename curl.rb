@@ -12,11 +12,11 @@
 class Curl < Formula
   desc "Get a file from an HTTP, HTTPS or FTP server with HTTP/3 support using quiche"
   homepage "https://curl.se"
-  url "https://curl.se/download/curl-8.2.1.tar.bz2"
-  mirror "https://github.com/curl/curl/releases/download/curl-8.2.1/curl-8.2.1.tar.bz2"
-  mirror "http://fresh-center.net/linux/www/curl-8.2.1.tar.bz2"
-  mirror "http://fresh-center.net/linux/www/legacy/curl-8.2.1.tar.bz2"
-  sha256 "0f1e31ebe336c09ec66381f1532f8350e466e1d02ffe10c4ac44a867f1b9d343"
+  url "https://curl.se/download/curl-8.3.0.tar.bz2"
+  mirror "https://github.com/curl/curl/releases/download/curl-8.3.0/curl-8.3.0.tar.bz2"
+  mirror "http://fresh-center.net/linux/www/curl-8.3.0.tar.bz2"
+  mirror "http://fresh-center.net/linux/www/legacy/curl-8.3.0.tar.bz2"
+  sha256 "051a217095671e925a129ba9e2ff2e223b44b08399003ba50738060955d010ff"
   license "curl"
 
   livecheck do
@@ -26,14 +26,13 @@ class Curl < Formula
 
   head do
     url "https://github.com/curl/curl.git"
-
-    depends_on "autoconf" => :build
-    depends_on "automake" => :build
-    depends_on "libtool" => :build
   end
 
   keg_only :provided_by_macos
 
+  depends_on "autoconf" => :build
+  depends_on "automake" => :build
+  depends_on "libtool" => :build
   depends_on "cmake" => :build
   depends_on "pkg-config" => :build
   depends_on "rust" => :build
@@ -68,26 +67,27 @@ class Curl < Formula
       (quiche/"deps/boringssl/src/lib").install Pathname.glob("target/release/build/*/out/build/lib{crypto,ssl}.a")
     end
 
-    system "./buildconf" if build.head?
+    system "autoreconf", "-fi"
 
     args = %W[
+      LDFLAGS=-Wl,-rpath,#{quiche.parent}/target/release
+      --with-openssl=#{quiche}/deps/boringssl/src
+      --with-quiche=#{quiche.parent}/target/release
+      --prefix=#{prefix}
+      --with-default-ssl-backend=openssl
       --disable-debug
       --disable-dependency-tracking
       --disable-silent-rules
-      --prefix=#{prefix}
-      --with-ssl=#{quiche}/deps/boringssl/src
       --without-ca-bundle
       --without-ca-path
-      --with-ca-fallback
       --with-secure-transport
-      --with-default-ssl-backend=openssl
       --with-libidn2
       --with-librtmp
       --with-libssh2
       --without-libpsl
-      --with-quiche=#{quiche.parent}/target/release
       --enable-alt-svc
     ]
+#      --with-ca-fallback
 
     args << if OS.mac?
       "--with-gssapi"
@@ -96,6 +96,7 @@ class Curl < Formula
     end
 
     system "./configure", *args
+    system "make"
     system "make", "install"
     system "make", "install", "-C", "scripts"
     libexec.install "scripts/mk-ca-bundle.pl"
