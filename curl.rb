@@ -78,8 +78,6 @@ class Curl < Formula
       --disable-debug
       --disable-dependency-tracking
       --disable-silent-rules
-      --without-ca-bundle
-      --without-ca-path
       --with-secure-transport
       --with-libidn2
       --with-librtmp
@@ -87,6 +85,8 @@ class Curl < Formula
       --without-libpsl
       --enable-alt-svc
     ]
+#      --without-ca-bundle
+#      --without-ca-path
 #      --with-ca-fallback
 
     args << if OS.mac?
