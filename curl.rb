@@ -12,11 +12,11 @@
 class Curl < Formula
   desc "Get a file from an HTTP, HTTPS or FTP server with HTTP/3 support using quiche"
   homepage "https://curl.se"
-  url "https://curl.se/download/curl-8.5.0.tar.bz2"
-  mirror "https://github.com/curl/curl/releases/download/curl-8.5.0/curl-8.5.0.tar.bz2"
-  mirror "http://fresh-center.net/linux/www/curl-8.5.0.tar.bz2"
-  mirror "http://fresh-center.net/linux/www/legacy/curl-8.5.0.tar.bz2"
-  sha256 "ce4b6a6655431147624aaf582632a36fe1ade262d5fab385c60f78942dd8d87b"
+  url "https://curl.se/download/curl-8.6.0.tar.bz2"
+  mirror "https://github.com/curl/curl/releases/download/curl-8.6.0/curl-8.6.0.tar.bz2"
+  mirror "http://fresh-center.net/linux/www/curl-8.6.0.tar.bz2"
+  mirror "http://fresh-center.net/linux/www/legacy/curl-8.6.0.tar.bz2"
+  sha256 "b4785f2d8877fa92c0e45d7155cf8cc6750dbda961f4b1a45bcbec990cf2fa9b"
   license "curl"
 
   livecheck do
@@ -78,13 +78,13 @@ class Curl < Formula
       --disable-debug
       --disable-dependency-tracking
       --disable-silent-rules
-      --with-secure-transport
       --with-libidn2
       --with-librtmp
       --with-libssh2
       --without-libpsl
       --enable-alt-svc
     ]
+#      --with-secure-transport
 #      --without-ca-bundle
 #      --without-ca-path
 #      --with-ca-fallback
