@@ -12,11 +12,11 @@
 class Curl < Formula
   desc "Get a file from an HTTP, HTTPS or FTP server with HTTP/3 support using quiche"
   homepage "https://curl.se"
-  url "https://curl.se/download/curl-8.9.1.tar.bz2"
-  mirror "https://github.com/curl/curl/releases/download/curl-8_9_1/curl-8.9.1.tar.bz2"
-  mirror "http://fresh-center.net/linux/www/curl-8.9.1.tar.bz2"
-  mirror "http://fresh-center.net/linux/www/legacy/curl-8.9.1.tar.bz2"
-  sha256 "b57285d9e18bf12a5f2309fc45244f6cf9cb14734e7454121099dd0a83d669a3"
+  url "https://curl.se/download/curl-8.10.0.tar.bz2"
+  mirror "https://github.com/curl/curl/releases/download/curl-8_10_0/curl-8.10.0.tar.bz2"
+  mirror "http://fresh-center.net/linux/www/curl-8.10.0.tar.bz2"
+  mirror "http://fresh-center.net/linux/www/legacy/curl-8.10.0.tar.bz2"
+  sha256 "be30a51f7bbe8819adf5a8e8cc6991393ede31f782b8de7b46235cc1eb7beb9f"
   license "curl"
 
   livecheck do
