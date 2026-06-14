@@ -46,7 +46,9 @@ class Curl < Formula
   uses_from_macos "zlib"
 
   resource "quiche" do
-    url "https://github.com/cloudflare/quiche.git", branch: "master"
+    url "https://github.com/cloudflare/quiche.git",
+        tag:      "0.29.1",
+        revision: "f0c7193c3b130d766f0d6f3e75d4f2405c85d376"
   end
 
   def install
@@ -62,14 +64,24 @@ class Curl < Formula
                       "--release",
                       "--package=quiche",
                       "--features=ffi,pkg-config-meta,qlog"
-      (quiche/"deps/boringssl/src/lib").install Pathname.glob("target/release/build/*/out/build/lib{crypto,ssl}.a")
+
+      boringssl_out = Pathname.glob("target/release/build/boring-sys-*/out").find do |path|
+        (path/"boringssl/src/include/openssl/ssl.h").exist? &&
+          (path/"build/libcrypto.a").exist? &&
+          (path/"build/libssl.a").exist?
+      end
+      raise "BoringSSL build output not found" if boringssl_out.nil?
+
+      boringssl = quiche.parent/"target/release/boringssl"
+      (boringssl/"include").install boringssl_out/"boringssl/src/include/openssl"
+      (boringssl/"lib").install boringssl_out/"build/libcrypto.a", boringssl_out/"build/libssl.a"
     end
 
     system "autoreconf", "-fi"
 
     args = %W[
       LDFLAGS=-Wl,-rpath,#{quiche.parent}/target/release
-      --with-openssl=#{quiche}/deps/boringssl/src
+      --with-openssl=#{quiche.parent}/target/release/boringssl
       --with-quiche=#{quiche.parent}/target/release
       --prefix=#{prefix}
       --with-default-ssl-backend=openssl
