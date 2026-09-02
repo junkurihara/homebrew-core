@@ -12,9 +12,9 @@
 class Curl < Formula
   desc "Get a file from an HTTP, HTTPS or FTP server with HTTP/3 support using quiche"
   homepage "https://curl.se"
-  url "https://curl.se/download/curl-8.21.0.tar.bz2"
-  mirror "https://github.com/curl/curl/releases/download/curl-8_21_0/curl-8.21.0.tar.bz2"
-  sha256 "ad6f2f94934b38e31e48272833c99b891d045b4565fe942a53fbd27bd3910e16"
+  url "https://curl.se/download/curl-8.22.0.tar.bz2"
+  mirror "https://github.com/curl/curl/releases/download/curl-8_22_0/curl-8.22.0.tar.bz2"
+  sha256 "5d956a6a22b3c279f50c421ee5d3c9e9d660cb6f115dcf881b579e952130549c"
   license "curl"
 
   livecheck do
@@ -47,8 +47,8 @@ class Curl < Formula
 
   resource "quiche" do
     url "https://github.com/cloudflare/quiche.git",
-        tag:      "0.29.2",
-        revision: "839b23d0edcc98aa1cf90c2cf0797b8cc56d4f15"
+        tag:      "0.29.3",
+        revision: "55886df3be579579207104c8e645825b6347a209"
   end
 
   def install
