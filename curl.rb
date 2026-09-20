@@ -47,8 +47,8 @@ class Curl < Formula
 
   resource "quiche" do
     url "https://github.com/cloudflare/quiche.git",
-        tag:      "0.29.3",
-        revision: "55886df3be579579207104c8e645825b6347a209"
+        tag:      "0.30.0",
+        revision: "be47c5011215b9f13bad06bd7627d3ae49888a19"
   end
 
   def install
