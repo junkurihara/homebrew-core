@@ -65,15 +65,19 @@ class Curl < Formula
                       "--package=quiche",
                       "--features=ffi,pkg-config-meta,qlog"
 
-      boringssl_out = Pathname.glob("target/release/build/boring-sys-*/out").find do |path|
-        (path/"boringssl/src/include/openssl/ssl.h").exist? &&
-          (path/"build/libcrypto.a").exist? &&
-          (path/"build/libssl.a").exist?
-      end
+      # boring-sys 5.x vendors BoringSSL headers under boringssl/include,
+      # while boring-sys 4.x uses boringssl/src/include.
+      boringssl_out, boringssl_include = Pathname.glob("target/release/build/boring-sys-*/out").filter_map do |path|
+        include_dir = [path/"boringssl/include", path/"boringssl/src/include"].find do |dir|
+          (dir/"openssl/ssl.h").exist?
+        end
+        libs_exist = (path/"build/libcrypto.a").exist? && (path/"build/libssl.a").exist?
+        [path, include_dir] if include_dir && libs_exist
+      end.first
       raise "BoringSSL build output not found" if boringssl_out.nil?
 
       boringssl = quiche.parent/"target/release/boringssl"
-      (boringssl/"include").install boringssl_out/"boringssl/src/include/openssl"
+      (boringssl/"include").install boringssl_include/"openssl"
       (boringssl/"lib").install boringssl_out/"build/libcrypto.a", boringssl_out/"build/libssl.a"
     end
 
@@ -98,6 +102,13 @@ class Curl < Formula
 #      --without-ca-bundle
 #      --without-ca-path
 #      --with-ca-fallback
+
+    # BoringSSL bundled with boring-sys 5.x needs the C++ runtime to link libssl.a.
+    args << if OS.mac?
+      "LIBS=-lc++"
+    else
+      "LIBS=-lstdc++"
+    end
 
     args << if OS.mac?
       "--with-gssapi"
