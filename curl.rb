@@ -12,10 +12,22 @@
 class Curl < Formula
   desc "Get a file from an HTTP, HTTPS or FTP server with HTTP/3 support using quiche"
   homepage "https://curl.se"
-  url "https://curl.se/download/curl-8.23.0.tar.bz2"
-  mirror "https://github.com/curl/curl/releases/download/curl-8_23_0/curl-8.23.0.tar.bz2"
-  sha256 "95b22eb32bf6d1fa6e3e9463bdb61cece3efc56d86576a9b3cbd428246a6d854"
   license "curl"
+
+  stable do
+    url "https://curl.se/download/curl-8.23.0.tar.bz2"
+    mirror "https://github.com/curl/curl/releases/download/curl-8_23_0/curl-8.23.0.tar.bz2"
+    sha256 "95b22eb32bf6d1fa6e3e9463bdb61cece3efc56d86576a9b3cbd428246a6d854"
+
+    # BoringSSL vendored by boring-sys 5.4.0 declares ASN1_STRING_get_length, which clashes
+    # with curl's static fallback of the same name in lib/vtls/openssl.c.
+    # Upstream fix: https://github.com/curl/curl/pull/23520
+    # Remove this patch once curl is bumped to a release containing it (8.24.0 or later).
+    patch do
+      url "https://github.com/curl/curl/commit/dfab21a9454065ddec5422052b1b902f5efc7c46.patch?full_index=1"
+      sha256 "30d2a861b6b21beed5f6b6de193ea3baff233377ee8486e80ec8cdc08e573efd"
+    end
+  end
 
   livecheck do
     url "https://curl.se/download/"
